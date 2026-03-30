@@ -1,0 +1,6 @@
+# Centy (getcenty.com) — security contact
+# https://www.rfc-editor.org/rfc/rfc9116.html
+
+Contact: mailto:hello@centycapital.com
+Preferred-Languages: en
+Canonical: https://www.getcenty.com/.well-known/security.txt

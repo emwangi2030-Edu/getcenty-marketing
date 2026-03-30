@@ -1,0 +1,4 @@
+.venv/
+service-account.json
+google-sa.json
+*-credentials.json

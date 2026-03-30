@@ -1,0 +1,19 @@
+# Secrets & local tooling
+.env
+.env.*
+*.pem
+**/service-account.json
+**/*-sa.json
+**/google-credentials.json
+
+# Python
+tools/seo-automation/.venv/
+__pycache__/
+*.py[cod]
+.Python
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/

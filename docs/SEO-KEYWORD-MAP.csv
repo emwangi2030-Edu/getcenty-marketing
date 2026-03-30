@@ -1,0 +1,17 @@
+cluster,pillar_or_spoke,primary_keyword_target,url,status,owner,last_reviewed,priority_notes
+bulk_mpesa,pillar,bulk M-Pesa payments Kenya,,planned,,,Hub: ultimate guide B2C vs B2B fees reconciliation
+bulk_mpesa,spoke,M-Pesa B2C payroll disbursement Kenya,,planned,,,Link to pillar
+bulk_mpesa,spoke,reconcile M-Pesa bulk payments payroll,,planned,,,Checklist downloadable optional
+casual_pay,pillar,casual workers payments Kenya,,planned,,,Hub: records + M-Pesa workflow + compliance overview
+casual_pay,spoke,pay casual labourers M-Pesa Kenya,,planned,,,
+casual_pay,spoke,daily wage payment Kenya,,planned,,,
+expenses,pillar,expense management Kenya SMEs,,planned,,,Hub: policy approvals petty cash
+expenses,spoke,petty cash management alternatives Kenya,,planned,,,
+expenses,spoke,employee expense claims approval workflow Kenya,,planned,,,
+payroll_sw,pillar,payroll software Kenya,,planned,,,Hub: how to choose (criteria)
+payroll_sw,spoke,best payroll software Kenya,,planned,,,Buyer guide; fair comparison
+payroll_sw,spoke,NSSF SHIF NITA payroll deductions Kenya,,planned,,,Refresh when rules change
+cross,spoke,KRA payroll employer obligations Kenya,,planned,,,High scrutiny — legal review
+cross,spoke,integrate payroll accounting Xero QuickBooks Kenya,,planned,,,
+marketing_page,n/a,Centy finance payroll M-Pesa,https://www.getcenty.com/,live,,2026-03-30,Primary commercial URL
+marketing_page,n/a,About Centy,https://www.getcenty.com/about.html,live,,,

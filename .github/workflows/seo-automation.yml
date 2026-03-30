@@ -1,0 +1,60 @@
+# Sync SEO CSVs to Google Sheets + append GSC metrics.
+# Secrets: GOOGLE_APPLICATION_CREDENTIALS_JSON, SEO_SHEET_ID
+# Optional: GSC_SITES (comma-separated Search Console property URLs)
+
+name: SEO — Sheets push & GSC report
+
+on:
+  schedule:
+    - cron: "0 7 * * 1" # Monday 07:00 UTC
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Job to run"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - push
+          - gsc
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    # Repo root = this getcenty-marketing folder (not a parent monorepo).
+    defaults:
+      run:
+        working-directory: tools/seo-automation
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Write credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        run: |
+          if [ -z "$GOOGLE_APPLICATION_CREDENTIALS_JSON" ]; then
+            echo "::error::Missing secret GOOGLE_APPLICATION_CREDENTIALS_JSON"
+            exit 1
+          fi
+          printf '%s' "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > "${RUNNER_TEMP}/sa.json"
+
+      - name: Run push + GSC
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+          SEO_SHEET_ID: ${{ secrets.SEO_SHEET_ID }}
+          GSC_SITES: ${{ secrets.GSC_SITES }}
+        run: |
+          CMD="${{ github.event.inputs.command }}"
+          if [ -z "$CMD" ]; then CMD=all; fi
+          python run_all.py "$CMD"

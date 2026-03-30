@@ -1,0 +1,27 @@
+# Add to /usr/local/lsws/conf/httpd_config.conf (listener map + virtualHost blocks).
+# Paths follow CyberPanel-style /home/<domain>/ — adjust vhRoot if you use /opt/...
+
+# --- Listener maps (repeat pattern used for app.centyhq.com) ---
+# map getcenty.com getcenty.com
+# map www.getcenty.com getcenty.com
+# map centyhq.com centyhq.com
+# map www.centyhq.com centyhq.com
+# map www.app.centyhq.com www.app.centyhq.com
+
+# --- Virtual host stubs ---
+# virtualHost getcenty.com {
+#   vhRoot                  /home/getcenty.com
+#   configFile              conf/vhosts/getcenty.com/vhost.conf
+# }
+#
+# virtualHost centyhq.com {
+#   vhRoot                  /home/centyhq.com
+#   configFile              conf/vhosts/centyhq.com/vhost.conf
+# }
+#
+# virtualHost www.app.centyhq.com {
+#   vhRoot                  /home/www.app.centyhq.com
+#   configFile              conf/vhosts/www.app.centyhq.com/vhost.conf
+# }
+
+# After edits: /usr/local/lsws/bin/lswsctrl restart
