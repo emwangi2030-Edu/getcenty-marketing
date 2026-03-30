@@ -2,6 +2,8 @@
 
 Syncs `docs/google-drive-export/*.csv` into a **Google Sheet** and appends **Google Search Console** aggregates to `GSC_Automated_Log`. Run from **Cursor’s terminal** or **GitHub Actions**.
 
+CI writes credentials with **`ci_write_credentials.py`** (no bash heredoc) so multiline JSON secrets stay valid.
+
 ## One-time Google Cloud setup
 
 1. Create a project in [Google Cloud Console](https://console.cloud.google.com/).
