@@ -5,7 +5,9 @@ rows to the GSC_Automated_Log tab on the same Sheet as sync_push.
 """
 
 import argparse
+import json
 import os
+import re
 import sys
 from datetime import date, timedelta
 
@@ -73,6 +75,42 @@ def append_rows(service, spreadsheet_id, rows):
     ).execute()
 
 
+def _search_console_api_enable_hint(exc):
+    """
+    If Google returns 403 accessNotConfigured for Search Console API, return a one-line hint with enable URL.
+    """
+    resp = getattr(exc, "resp", None)
+    if resp is None or getattr(resp, "status", None) != 403:
+        return None
+    raw = getattr(resp, "content", b"") or b""
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return None
+    err = data.get("error") or {}
+    reasons = {e.get("reason") for e in err.get("errors", []) if isinstance(e, dict)}
+    if "accessNotConfigured" not in reasons:
+        return None
+    msg = err.get("message", "")
+    if "search" not in msg.lower() and "webmasters" not in msg.lower():
+        return None
+    m = re.search(r"https://console\.developers\.google\.com/[^\s\"]+", msg)
+    if m:
+        return "Hint: Enable Google Search Console API (same project as the service account key): %s" % m.group(0)
+    m_proj = re.search(r"project (\d+)", msg)
+    if m_proj:
+        pid = m_proj.group(1)
+        url = (
+            "https://console.developers.google.com/apis/api/searchconsole.googleapis.com/overview?project=%s"
+            % pid
+        )
+        return "Hint: Enable Google Search Console API for GCP project %s: %s" % (pid, url)
+    return (
+        "Hint: In Google Cloud Console → APIs & Services → Library, enable **Google Search Console API** "
+        "for the project that owns this service account key."
+    )
+
+
 def fetch_aggregate(gsc, site_url, start, end):
     """Site-wide totals for the period."""
     req = {
@@ -126,12 +164,16 @@ def main():
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     out_rows = []
+    api_enable_hint = None
 
     for site in sites:
         try:
             agg = fetch_aggregate(gsc, site, start_s, end_s)
         except Exception as e:
             print("WARN: GSC query failed for %s: %s" % (site, e), file=sys.stderr)
+            h = _search_console_api_enable_hint(e)
+            if h:
+                api_enable_hint = h
             resp = getattr(e, "resp", None)
             if resp is not None and getattr(resp, "content", None):
                 print(
@@ -156,6 +198,8 @@ def main():
 
     if not out_rows:
         print("ERROR: no rows to append (check GSC access / site URLs)", file=sys.stderr)
+        if api_enable_hint:
+            print(api_enable_hint, file=sys.stderr)
         return 1
 
     try:

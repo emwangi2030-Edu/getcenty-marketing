@@ -79,6 +79,7 @@ Use **Weekly_Metrics** for manual notes; use **GSC_Automated_Log** for machine h
 
 ## Troubleshooting
 
-- **`403` / access denied:** Share the Sheet with the SA email; add SA to each GSC property.
+- **`403` — Search Console API not enabled** (log says `accessNotConfigured` / “has not been used in project …”): open [Google Cloud Console](https://console.cloud.google.com/) → select the **same project** as the service account key → **APIs & Services → Library** → enable **Google Search Console API**. Google often includes a direct link in the error message (`.../apis/api/searchconsole.googleapis.com/overview?project=...`). Wait a few minutes after enabling, then re-run the workflow.
+- **`403` / access denied (other):** Share the Sheet with the SA email; add SA to each GSC property.
 - **`404` siteUrl in GSC:** Property URL must match GSC exactly (trailing slash, `https`).
 - **Empty GSC rows:** New property or no data in window — script exits with error if nothing to append.
