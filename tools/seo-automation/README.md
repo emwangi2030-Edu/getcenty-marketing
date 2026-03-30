@@ -51,7 +51,9 @@ python run_all.py --dry-run    # no API writes
 
 ## GitHub Actions
 
-Workflow: `.github/workflows/seo-automation.yml` — assumes the **git repository root is this `getcenty-marketing` folder**. If the repo is a **parent monorepo**, edit the workflow `defaults.run.working-directory` to `getcenty-marketing/tools/seo-automation` (and keep checkout at parent root).
+Repository: [emwangi2030-Edu/getcenty-marketing](https://github.com/emwangi2030-Edu/getcenty-marketing).
+
+Workflow: `.github/workflows/seo-automation.yml` — **repository root = this project** (`tools/seo-automation` under checkout). If you ever nest this inside a **parent monorepo**, edit the workflow `defaults.run.working-directory` to `getcenty-marketing/tools/seo-automation`.
 
 **Secrets** (Settings → Secrets and variables → Actions):
 
