@@ -97,16 +97,43 @@ def main():
     creds = load_credentials(SCOPES)
     service = build("sheets", "v4", credentials=creds, cache_discovery=False)
 
-    for filename, tab in TAB_MAP.items():
-        path = root / filename
-        if not path.is_file():
-            print(f"WARN: skip missing file {path}", file=sys.stderr)
-            continue
-        rows = read_csv_rows(path)
-        push_tab(service, sheet_id, tab, rows, dry_run=False)
+    try:
+        for filename, tab in TAB_MAP.items():
+            path = root / filename
+            if not path.is_file():
+                print(f"WARN: skip missing file {path}", file=sys.stderr)
+                continue
+            rows = read_csv_rows(path)
+            push_tab(service, sheet_id, tab, rows, dry_run=False)
+    except Exception as exc:
+        _print_api_error("sync_push (Google Sheets)", exc)
+        return 1
 
     print("sync_push: done")
     return 0
+
+
+def _print_api_error(where, exc):
+    """Print useful detail for HttpError and friends (stderr + GitHub Actions)."""
+    print("ERROR in %s: %s" % (where, exc), file=sys.stderr)
+    resp = getattr(exc, "resp", None)
+    status = getattr(resp, "status", None) if resp else None
+    if status is not None:
+        print("HTTP status: %s" % status, file=sys.stderr)
+    content = getattr(resp, "content", b"") if resp else b""
+    if content:
+        try:
+            snippet = content.decode("utf-8", errors="replace")[:800]
+        except Exception:
+            snippet = str(content)[:800]
+        print("Response (truncated): %s" % snippet, file=sys.stderr)
+    if status == 403:
+        print(
+            "Hint: Share the spreadsheet with the service account email (Editor).",
+            file=sys.stderr,
+        )
+    if status == 404:
+        print("Hint: Check SEO_SHEET_ID matches the /d/SHEET_ID/ in the Sheet URL.", file=sys.stderr)
 
 
 if __name__ == "__main__":

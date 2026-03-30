@@ -129,7 +129,14 @@ def main():
         try:
             agg = fetch_aggregate(gsc, site, start_s, end_s)
         except Exception as e:
-            print(f"WARN: GSC failed for {site}: {e}", file=sys.stderr)
+            print("WARN: GSC query failed for %s: %s" % (site, e), file=sys.stderr)
+            resp = getattr(e, "resp", None)
+            if resp is not None and getattr(resp, "content", None):
+                print(
+                    "  detail: %s"
+                    % resp.content.decode("utf-8", errors="replace")[:400],
+                    file=sys.stderr,
+                )
             continue
         out_rows.append(
             [
@@ -149,7 +156,22 @@ def main():
         print("ERROR: no rows to append (check GSC access / site URLs)", file=sys.stderr)
         return 1
 
-    append_rows(sheets, sheet_id, out_rows)
+    try:
+        append_rows(sheets, sheet_id, out_rows)
+    except Exception as exc:
+        print("ERROR in gsc_report (Sheets append): %s" % exc, file=sys.stderr)
+        resp = getattr(exc, "resp", None)
+        if resp is not None:
+            print("HTTP status: %s" % getattr(resp, "status", "?"), file=sys.stderr)
+            c = getattr(resp, "content", b"") or b""
+            if c:
+                print("Response (truncated): %s" % c.decode("utf-8", errors="replace")[:800], file=sys.stderr)
+        print(
+            "Hint: Share the Sheet with the service account; add the same email in Search Console for each site_url.",
+            file=sys.stderr,
+        )
+        return 1
+
     print("gsc_report: appended to GSC_Automated_Log")
     return 0
 

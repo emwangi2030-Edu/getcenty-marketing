@@ -49,18 +49,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
         run: |
           set -euo pipefail
-          if [ -z "${GOOGLE_APPLICATION_CREDENTIALS_JSON:-}" ]; then
-            echo "::error::Missing secret GOOGLE_APPLICATION_CREDENTIALS_JSON"
-            exit 1
-          fi
-          python << 'PY'
-          import json, os, pathlib
-          raw = os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
-          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "sa.json"
-          data = json.loads(raw)
-          path.write_text(json.dumps(data, separators=(",", ":")))
-          print("Wrote", path, "keys:", list(data.keys()))
-          PY
+          python ci_write_credentials.py
 
       - name: Sync CSVs → Google Sheet
         id: push
