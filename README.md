@@ -8,14 +8,14 @@ Static marketing site for **getcenty.com** (HTML/CSS/JS), SEO docs, and automati
 
 Remote: [github.com/emwangi2030-Edu/getcenty-marketing](https://github.com/emwangi2030-Edu/getcenty-marketing).
 
-## Push from your machine (this environment has no GitHub auth)
+## Git remote (SSH)
 
-```bash
-cd getcenty-marketing
-git remote -v   # origin → https://github.com/emwangi2030-Edu/getcenty-marketing.git
-git push -u origin main
+```text
+git@github.com:emwangi2030-Edu/getcenty-marketing.git
 ```
 
-Use a [personal access token](https://github.com/settings/tokens) as the password over HTTPS, or switch the remote to SSH:
+Push: `git push -u origin main` (after `git clone` or init with this remote).
 
-`git remote set-url origin git@github.com:emwangi2030-Edu/getcenty-marketing.git`
+HTTPS + [PAT](https://github.com/settings/tokens) also works if you prefer:
+
+`git remote set-url origin https://github.com/emwangi2030-Edu/getcenty-marketing.git`
