@@ -80,6 +80,7 @@ Use **Weekly_Metrics** for manual notes; use **GSC_Automated_Log** for machine h
 ## Troubleshooting
 
 - **`403` — Search Console API not enabled** (log says `accessNotConfigured` / “has not been used in project …”): open [Google Cloud Console](https://console.cloud.google.com/) → select the **same project** as the service account key → **APIs & Services → Library** → enable **Google Search Console API**. Google often includes a direct link in the error message (`.../apis/api/searchconsole.googleapis.com/overview?project=...`). Wait a few minutes after enabling, then re-run the workflow.
-- **`403` / access denied (other):** Share the Sheet with the SA email; add SA to each GSC property.
+- **`403` — “User does not have sufficient permission for site”** (`forbidden`): the API works, but the **service account is not invited** on that Search Console property. For **each** URL in `GSC_SITES` (defaults include `https://www.getcenty.com/` and `https://blog.getcenty.com/`), open [Search Console](https://search.google.com/search-console) → select that **exact** property → **Settings** → **Users and permissions** → **Add user** → paste the **`client_email`** from the same JSON as `GOOGLE_APPLICATION_CREDENTIALS_JSON` → role **Full**. Domain properties and URL-prefix properties are separate: the SA must be added on the property the script queries. See [Google’s help](https://support.google.com/webmasters/answer/7687615).
+- **`403` / Sheets:** Share the SEO spreadsheet with the SA email as **Editor**.
 - **`404` siteUrl in GSC:** Property URL must match GSC exactly (trailing slash, `https`).
 - **Empty GSC rows:** New property or no data in window — script exits with error if nothing to append.

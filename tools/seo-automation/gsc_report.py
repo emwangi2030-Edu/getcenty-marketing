@@ -111,6 +111,33 @@ def _search_console_api_enable_hint(exc):
     )
 
 
+def _gsc_insufficient_permission_hint(exc):
+    """
+    403 from Search Analytics when the service account is not a user on the property.
+    """
+    resp = getattr(exc, "resp", None)
+    if resp is None or getattr(resp, "status", None) != 403:
+        return None
+    raw = getattr(resp, "content", b"") or b""
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return None
+    err = data.get("error") or {}
+    reasons = {e.get("reason") for e in err.get("errors", []) if isinstance(e, dict)}
+    if "forbidden" not in reasons:
+        return None
+    msg = (err.get("message") or "").lower()
+    if "permission" not in msg and "site" not in msg:
+        return None
+    return (
+        "Hint: The API is enabled, but this service account is not a Search Console user on that property. "
+        "In Google Search Console open each URL-prefix property (exact match, including trailing slash) → "
+        "Settings → Users and permissions → Add user → add the SA email with **Full** access. "
+        "See https://support.google.com/webmasters/answer/7687615"
+    )
+
+
 def fetch_aggregate(gsc, site_url, start, end):
     """Site-wide totals for the period."""
     req = {
@@ -165,6 +192,7 @@ def main():
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     out_rows = []
     api_enable_hint = None
+    gsc_permission_hint = None
 
     for site in sites:
         try:
@@ -174,6 +202,9 @@ def main():
             h = _search_console_api_enable_hint(e)
             if h:
                 api_enable_hint = h
+            h2 = _gsc_insufficient_permission_hint(e)
+            if h2:
+                gsc_permission_hint = h2
             resp = getattr(e, "resp", None)
             if resp is not None and getattr(resp, "content", None):
                 print(
@@ -200,6 +231,10 @@ def main():
         print("ERROR: no rows to append (check GSC access / site URLs)", file=sys.stderr)
         if api_enable_hint:
             print(api_enable_hint, file=sys.stderr)
+        elif gsc_permission_hint:
+            sa_email = getattr(creds, "service_account_email", None) or "(see client_email in your SA JSON)"
+            print(gsc_permission_hint, file=sys.stderr)
+            print("      Service account to add: %s" % sa_email, file=sys.stderr)
         return 1
 
     try:
