@@ -9,6 +9,8 @@ import os
 import sys
 from datetime import date, timedelta
 
+from sheet_id import normalize_spreadsheet_id
+
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/webmasters.readonly",
@@ -98,7 +100,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    sheet_id = os.environ.get("SEO_SHEET_ID", "").strip()
+    sheet_id = normalize_spreadsheet_id(os.environ.get("SEO_SHEET_ID", ""))
     sites = parse_sites()
     end = date.today()
     start_s, end_s = daterange_days(end, args.days)
@@ -166,10 +168,18 @@ def main():
             c = getattr(resp, "content", b"") or b""
             if c:
                 print("Response (truncated): %s" % c.decode("utf-8", errors="replace")[:800], file=sys.stderr)
-        print(
-            "Hint: Share the Sheet with the service account; add the same email in Search Console for each site_url.",
-            file=sys.stderr,
-        )
+        status = getattr(resp, "status", None) if resp is not None else None
+        if status == 404:
+            print(
+                "Hint: Sheet not found or not visible to the service account. Fix SEO_SHEET_ID "
+                "(bare ID or full URL) and share the Sheet with the SA email as Editor.",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "Hint: Share the Sheet with the service account; add the same email in Search Console for each site_url.",
+                file=sys.stderr,
+            )
         return 1
 
     print("gsc_report: appended to GSC_Automated_Log")

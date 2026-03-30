@@ -62,7 +62,7 @@ Workflow: `.github/workflows/seo-automation.yml` — **repository root = this pr
 | Name | Value |
 |------|--------|
 | `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Full JSON of the service account key (paste multiline secret) |
-| `SEO_SHEET_ID` | Spreadsheet ID |
+| `SEO_SHEET_ID` | Spreadsheet ID only (`/d/THIS_PART/edit`) **or** full Sheet URL (we extract the ID) |
 
 Optional:
 

@@ -10,6 +10,8 @@ import os
 import sys
 from pathlib import Path
 
+from sheet_id import normalize_spreadsheet_id
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # CSV filename (without path) -> tab title (must match [A-Za-z0-9_]+ roughly for Sheets)
@@ -72,7 +74,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Print actions only")
     args = parser.parse_args()
 
-    sheet_id = os.environ.get("SEO_SHEET_ID", "").strip()
+    sheet_id = normalize_spreadsheet_id(os.environ.get("SEO_SHEET_ID", ""))
     root = export_dir()
     if not root.is_dir():
         print(f"ERROR: Export dir missing: {root}", file=sys.stderr)
@@ -133,7 +135,11 @@ def _print_api_error(where, exc):
             file=sys.stderr,
         )
     if status == 404:
-        print("Hint: Check SEO_SHEET_ID matches the /d/SHEET_ID/ in the Sheet URL.", file=sys.stderr)
+        print(
+            "Hint: 404 often means wrong ID or the Sheet is not shared with the service account "
+            "(Google may hide existence). Use only the ID from /d/SHEET_ID/ or paste the full URL as the secret.",
+            file=sys.stderr,
+        )
 
 
 if __name__ == "__main__":
