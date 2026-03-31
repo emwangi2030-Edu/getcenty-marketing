@@ -21,6 +21,7 @@ on:
           - all
           - push
           - gsc
+          - ping
 
 jobs:
   automate:
@@ -85,3 +86,14 @@ jobs:
             exit 1
           fi
           python gsc_report.py
+
+      - name: GSC — ping sitemap (+ optional URL inspection)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.command == 'ping' }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+          GSC_PROPERTY_URL: https://blog.getcenty.com/
+          GSC_SITEMAP_URL: https://blog.getcenty.com/sitemap_index.xml
+          GSC_INSPECT_URL: https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/
+        run: |
+          set -euo pipefail
+          python gsc_ping_sitemap.py

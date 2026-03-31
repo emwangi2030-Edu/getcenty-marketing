@@ -21,7 +21,7 @@ def main():
         "command",
         nargs="?",
         default="all",
-        choices=("all", "push", "gsc"),
+        choices=("all", "push", "gsc", "ping"),
         help="Which step to run (default all)",
     )
     parser.add_argument("--dry-run", action="store_true")
@@ -36,6 +36,11 @@ def main():
     # Pass through extra args (e.g. --days 14) only to gsc_report
     if args.command in ("all", "gsc"):
         code = run("gsc_report.py", extra + passthrough)
+        if code != 0:
+            return code
+
+    if args.command == "ping":
+        code = run("gsc_ping_sitemap.py", extra)
         if code != 0:
             return code
 

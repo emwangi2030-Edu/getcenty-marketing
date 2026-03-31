@@ -46,8 +46,11 @@ export SEO_SHEET_ID="your_spreadsheet_id"
 python run_all.py              # push CSVs + GSC append
 python run_all.py push         # only Sheets sync
 python run_all.py gsc          # only GSC append
+python run_all.py ping         # GSC: (re)submit blog sitemap + optional URL inspection
 python run_all.py --dry-run    # no API writes
 ```
+
+**GSC “ping” (`gsc_ping_sitemap.py`):** Calls the [Search Console sitemaps.submit](https://developers.google.com/webmaster-tools/v1/sitemaps/submit) API for `https://blog.getcenty.com/sitemap_index.xml` (override with `GSC_PROPERTY_URL` / `GSC_SITEMAP_URL`). That tells Google the sitemap URL again; it helps discovery but is **not** the same as the UI **Request indexing** button—Google does not offer a public API to queue arbitrary URLs for indexing. Optional `GSC_INSPECT_URL` runs the [URL Inspection API](https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect) and prints status plus a link to open the result in Search Console. Requires OAuth scope `https://www.googleapis.com/auth/webmasters` (write); the same service account must have **Full** access on the property.
 
 **CI / GitHub Actions:** use repository secret `GOOGLE_APPLICATION_CREDENTIALS_JSON` (entire JSON as a string) instead of a file path.
 
@@ -68,7 +71,7 @@ Optional:
 
 | `GSC_SITES` | e.g. `https://www.getcenty.com/,https://blog.getcenty.com/` if defaults are wrong |
 
-Schedule: **Mondays 07:00 UTC** (push + report). Use **Run workflow** for manual runs.
+Schedule: **Mondays 07:00 UTC** (push + report). Use **Run workflow** for manual runs; choose **`ping`** to submit the blog sitemap and run URL inspection on the pillar post (see workflow env in `seo-automation.yml`).
 
 ## Behaviour
 
