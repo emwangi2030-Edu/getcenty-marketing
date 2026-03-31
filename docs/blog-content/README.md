@@ -8,7 +8,7 @@ WordPress post bodies are maintained here as HTML fragments for version control.
 
 ## Definition of done (see `docs/SEO-GOVERNANCE.md`)
 
-After first publish: add **featured image** (16:9), confirm **author** and **Organization** schema in Rank Math, request indexing in GSC, and link this pillar from the next cluster posts when they ship.
+**Pillar 001:** Featured image is set (Unsplash — Carlos Muza, license in attachment description on WP). Author on the post: **Admin** (`centy_admin`). Still do: confirm **Organization** schema in Rank Math if needed, **Request indexing** in GSC (steps below), and link this pillar from the next cluster posts when they ship.
 
 ## WP-CLI import (server)
 
