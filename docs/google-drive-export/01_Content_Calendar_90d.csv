@@ -1,6 +1,6 @@
 publish_order,target_date,phase,format,working_title,cluster,primary_keyword,live_url,status,owner
 1,2026-03-30,Phase 1,ops,— Week 1: GSC baseline export + coverage fixes (no publish unless ready),cross,,,planned,
-2,2026-04-01,Phase 1,pillar,Bulk M-Pesa & payroll disbursements in Kenya: the complete operations guide,bulk_mpesa,bulk M-Pesa payments Kenya,,planned,
+2,2026-04-01,Phase 1,pillar,Bulk M-Pesa & payroll disbursements in Kenya: the complete operations guide,bulk_mpesa,bulk M-Pesa payments Kenya,https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/,shipped,
 3,2026-04-03,Phase 1,pillar,"Paying casual workers in Kenya: records, M-Pesa workflows, and what finance teams track",casual_pay,casual workers payments Kenya,,planned,
 4,2026-04-06,Phase 1,pillar,"Expense management for Kenyan SMEs: policy, approvals, and audit-ready trails",expenses,expense management Kenya SMEs,,planned,
 5,2026-04-08,Phase 1,pillar,"Payroll software in Kenya: how to choose (criteria, not hype)",payroll_sw,payroll software Kenya,,planned,

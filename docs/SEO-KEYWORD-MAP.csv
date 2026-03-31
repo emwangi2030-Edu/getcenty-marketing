@@ -1,5 +1,5 @@
 cluster,pillar_or_spoke,primary_keyword_target,url,status,owner,last_reviewed,priority_notes
-bulk_mpesa,pillar,bulk M-Pesa payments Kenya,,planned,,,Hub: ultimate guide B2C vs B2B fees reconciliation
+bulk_mpesa,pillar,bulk M-Pesa payments Kenya,https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/,live,,2026-03-31,Hub: ultimate guide B2C vs B2B fees reconciliation
 bulk_mpesa,spoke,M-Pesa B2C payroll disbursement Kenya,,planned,,,Link to pillar
 bulk_mpesa,spoke,reconcile M-Pesa bulk payments payroll,,planned,,,Checklist downloadable optional
 casual_pay,pillar,casual workers payments Kenya,,planned,,,Hub: records + M-Pesa workflow + compliance overview
