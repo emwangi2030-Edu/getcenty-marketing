@@ -73,6 +73,8 @@ Optional:
 
 Schedule: **Mondays 07:00 UTC** (push + report). Use **Run workflow** for manual runs; choose **`ping`** to submit the blog sitemap and run URL inspection on the pillar post (see workflow env in `seo-automation.yml`).
 
+**Other CI:** [`seo-quality.yml`](../../.github/workflows/seo-quality.yml) runs HTML sanity checks, link checking, and Lighthouse on public URLs (no secrets). See [`tools/seo-checks/README.md`](../seo-checks/README.md) and [`SEO-YOU-DO.md`](../../SEO-YOU-DO.md) for what stays manual (e.g. Bing).
+
 ## Behaviour
 
 - **sync_push:** Replaces tab content for mapped CSVs (see `TAB_MAP` in `sync_push.py`). Does **not** delete `GSC_Automated_Log`.

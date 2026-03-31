@@ -1,0 +1,53 @@
+# Public URL checks: HTML sanity, link health, Lighthouse (artifacts).
+# No repo secrets required. Bing / GSC UI tasks stay manual — see SEO-YOU-DO.md.
+
+name: SEO quality
+
+on:
+  schedule:
+    - cron: "15 9 * * 3" # Wednesday 09:15 UTC
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/seo-check-urls.txt"
+      - "tools/seo-checks/**"
+      - ".github/workflows/seo-quality.yml"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: SEO sanity (HTTP 200, canonical, no noindex, og:title)
+        run: python tools/seo-checks/seo_sanity_check.py
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Link checker (lychee)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress --max-retries 3 --accept 200,429 docs/seo-check-urls.txt
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Lighthouse (scores + reports as artifacts)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://www.getcenty.com/
+            https://blog.getcenty.com/
+            https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/
+          runs: 1
+          uploadArtifacts: true
