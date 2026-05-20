@@ -8,7 +8,7 @@
 
 | Workflow | What it does |
 |----------|----------------|
-| **SEO — Sheets push & GSC report** (`seo-automation.yml`) | CSV → Sheet, GSC aggregates → `GSC_Automated_Log`; optional **`ping`** for sitemap submit + URL Inspection API. |
+| **SEO — Sheets push & GSC report** (`seo-automation.yml`) | CSV → Sheet, GSC aggregates → `GSC_Automated_Log`; optional **`ping`** submits **both** `www.getcenty.com/sitemap.xml` and `blog.getcenty.com/sitemap_index.xml`, plus URL Inspection on the homepage and pillar post. |
 | **SEO quality** (`seo-quality.yml`) | Weekly + on push to listed paths: **sanity** (200, canonical, no `noindex`, `og:title`), **lychee** link check on [`docs/seo-check-urls.txt`](docs/seo-check-urls.txt), **Lighthouse** reports (artifacts) for www + blog + pillar post. |
 
 Add new important URLs to `docs/seo-check-urls.txt` when you ship pages.
