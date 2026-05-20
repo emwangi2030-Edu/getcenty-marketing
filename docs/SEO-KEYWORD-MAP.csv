@@ -5,7 +5,7 @@ bulk_mpesa,spoke,reconcile M-Pesa bulk payments payroll,,planned,,,Checklist dow
 casual_pay,pillar,casual workers payments Kenya,,draft,,,Draft at docs/blog-content/002-casual-workers-payments-kenya.html — needs statutory reviewer sign-off before publish; hub covers records + M-Pesa workflow + compliance overview
 casual_pay,spoke,pay casual labourers M-Pesa Kenya,,planned,,,
 casual_pay,spoke,daily wage payment Kenya,,planned,,,
-expenses,pillar,expense management Kenya SMEs,,planned,,,Hub: policy approvals petty cash
+expenses,pillar,expense management Kenya SMEs,,draft,,,Draft at docs/blog-content/003-expense-management-kenya-smes.html — needs statutory reviewer sign-off (VAT/ETIMS/PAYE benefits/WHT framing); hub covers policy approvals petty cash claims reconciliation fraud
 expenses,spoke,petty cash management alternatives Kenya,,planned,,,
 expenses,spoke,employee expense claims approval workflow Kenya,,planned,,,
 payroll_sw,pillar,payroll software Kenya,,planned,,,Hub: how to choose (criteria)
