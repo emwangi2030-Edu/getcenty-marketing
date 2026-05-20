@@ -1,0 +1,102 @@
+<!-- Source HTML for WordPress post body. Featured image: 16:9 of a site supervisor confirming attendance and a finance lead reviewing an M-Pesa batch on a laptop at the worksite; alt: "Site supervisor and finance lead confirming casual worker attendance and reviewing an M-Pesa batch on a laptop at a Kenyan worksite". Spoke under the casual-pay pillar. Statutory references are category-only. -->
+<p><strong>Summary:</strong> A working-level guide to <strong>paying casual labourers via M-Pesa in Kenya</strong> — attendance lock, batch construction, MSISDN hygiene, supervisor sign-off, maker–checker approval, real-time failure triage, and end-of-day proof. Includes a concrete cycle walk-through. Operations guidance, not legal or tax advice; confirm statutory specifics with a qualified Kenyan advisor.</p>
+
+<p>Paying casual labourers via M-Pesa works on the same disbursement rails as salaried staff, but the cadence, batch size, and failure profile are different enough that copy-pasting a monthly-payroll process does not work. This spoke sits under the pillar on <a href="https://blog.getcenty.com/casual-workers-payments-kenya/">casual workers payments Kenya</a> and walks through one cycle end-to-end, naming the records and checks that make the difference between a clean Friday and a Saturday morning of phone calls.</p>
+
+<h2>The cycle, in one sentence</h2>
+
+<p>Attendance is captured at the worksite, locked at a published cutoff, computed against rate cards, reviewed maker–checker, sent as a batch on M-Pesa with line-level status, failures triaged inside the same day, and reconciled before the next cycle opens.</p>
+
+<h2>Step 1 — Attendance capture at source</h2>
+
+<p>The single biggest determinant of casual-pay accuracy is capture <strong>at the source</strong>, not at the end of the period:</p>
+
+<ul>
+<li><strong>Mobile app</strong> for supervisors: tap-to-mark-present, photo log of who is on site, geo-tagged where the workforce is field-based.</li>
+<li><strong>Paper roster</strong> as a fallback: countersigned twice a day, photographed by the supervisor at lunch and end of shift.</li>
+<li><strong>Biometric or QR check-in</strong> where the site supports it: removes ambiguity for shifts with set start and end times.</li>
+<li><strong>Supervisor sign-off</strong> at end of period is mandatory, regardless of which capture method is in use.</li>
+</ul>
+
+<p>Avoid: WhatsApp text messages as the only attendance record. They are easy to lose, easy to dispute, and impossible to audit at scale.</p>
+
+<h2>Step 2 — Rate computation</h2>
+
+<p>For each worker on the attendance list, compute the gross from <strong>attendance × rate card</strong> or <strong>output × piece rate</strong>:</p>
+
+<ul>
+<li>Rate cards are first-class objects: a documented rate with an effective date per role, archived rather than overwritten when changed.</li>
+<li>Allowances (transport, food, hazard) added per worker per period under documented policy.</li>
+<li>Deductions (tools, breakages, advances) applied under the deductions register, with a per-worker reconciliation.</li>
+<li>Statutory deductions applied where the casual category is in scope per your statutory reviewer's documented decision.</li>
+</ul>
+
+<h2>Step 3 — MSISDN hygiene</h2>
+
+<p>Validate every M-Pesa number before the batch leaves preparation:</p>
+
+<ul>
+<li>Strip whitespace, confirm country code, validate digit count.</li>
+<li>Flag duplicates within the batch (one worker, two lines — investigate before sending).</li>
+<li>Flag numbers that failed in the previous cycle.</li>
+<li>Reject changes made within the cutoff window without a second approver — number-changing scams target casual workforces specifically.</li>
+</ul>
+
+<p>A weekly casual batch with poor MSISDN hygiene typically sees 5–15% failure rate; a disciplined process gets it under 2%.</p>
+
+<h2>Step 4 — Maker–checker review</h2>
+
+<p>One person prepares the batch (worker list, amounts, totals); a different person approves it. In a small team:</p>
+
+<ul>
+<li>The preparer signs off in writing or in-system.</li>
+<li>The approver spot-checks at least one exception case in detail.</li>
+<li>Approval is recorded with date-time and approver identity.</li>
+<li>Where roles must blend on a particular cycle, the deviation is documented and reviewed quarterly.</li>
+</ul>
+
+<h2>Step 5 — Submission and per-line response</h2>
+
+<p>Submit the batch on the contracted M-Pesa rail. Capture the provider's reference and the per-line response — success, failure, pending. See <a href="https://blog.getcenty.com/mpesa-b2c-payroll-disbursement-kenya/">M-Pesa B2C payroll disbursement Kenya</a> for the technical detail on idempotency, partial success, and retry semantics.</p>
+
+<h2>Step 6 — Same-day failure triage</h2>
+
+<p>For each failure:</p>
+
+<ol>
+<li>Identify the worker and confirm the correct number with the supervisor.</li>
+<li>Attempt one retry on the same line reference if the failure reason supports it.</li>
+<li>If retry fails, decide: pay through an alternate rail today, or defer to the next cycle with an approved exception note.</li>
+<li>Communicate with the worker — uncertainty drives the next-day call volume.</li>
+</ol>
+
+<p>Do not let failures float overnight without a decision. Open failures past 24 hours are the strongest predictor of disputes.</p>
+
+<h2>Step 7 — Proof and posting</h2>
+
+<ul>
+<li>Per-worker proof of payment recorded against the batch ID — provider reference, amount, timestamp.</li>
+<li>Site / supervisor receives the batch summary for posting on the noticeboard or sharing in the team channel.</li>
+<li>Journal entry posted to the ledger same cycle, carrying the batch ID in the narration.</li>
+</ul>
+
+<h2>Common operator mistakes</h2>
+
+<ul>
+<li><strong>Editing attendance after cutoff</strong> without a documented exception — corrodes the audit trail.</li>
+<li><strong>Skipping rate-card archive</strong> when rates change — makes historical disputes impossible to resolve.</li>
+<li><strong>Treating MSISDN failures as the worker's problem</strong> rather than triaging same-cycle — destroys trust quickly.</li>
+<li><strong>Running advances through WhatsApp</strong> instead of the deductions register — they get forgotten.</li>
+<li><strong>Conflating disbursement with statutory</strong> — paying the worker today does not file the statutory line; finance must own both.</li>
+</ul>
+
+<h2>How this fits in the cluster</h2>
+
+<ul>
+<li>For the broader operating model for casual workforces, see <a href="https://blog.getcenty.com/casual-workers-payments-kenya/">casual workers payments Kenya</a>.</li>
+<li>For the disbursement transport this article uses, see <a href="https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/">bulk M-Pesa payroll disbursements Kenya</a>.</li>
+<li>For piece-rate variations, see the upcoming spoke on <a href="https://blog.getcenty.com/casual-workers-payments-kenya/">daily wage payment Kenya</a>.</li>
+<li>For the monthly close that wraps multiple casual cycles, see the <a href="https://blog.getcenty.com/kenya-payroll-month-end-checklist/">Kenya payroll month-end checklist</a>.</li>
+</ul>
+
+<p><a href="https://www.getcenty.com/">Centy</a> builds casual-pay workflows that enforce attendance lock, MSISDN validation, maker–checker, and per-line status as defaults rather than discipline. For product context, see the <a href="https://www.getcenty.com/about.html">about Centy</a> page or <a href="https://app.centyhq.com/signup" rel="noopener noreferrer">create an account on Centy</a>. This article is operations guidance, not legal or tax advice; confirm statutory specifics with a qualified Kenyan advisor.</p>

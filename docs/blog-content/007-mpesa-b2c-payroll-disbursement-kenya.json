@@ -1,0 +1,9 @@
+{
+  "title": "M-Pesa B2C payroll disbursement Kenya — idempotency, partial success, retries",
+  "slug": "mpesa-b2c-payroll-disbursement-kenya",
+  "excerpt": "A working-level guide to M-Pesa B2C payroll disbursement in Kenya — idempotency, partial-success semantics, settlement and statement latency, fees, retries, security, and observability.",
+  "focus_keyword": "M-Pesa B2C payroll disbursement Kenya",
+  "meta_title": "M-Pesa B2C payroll disbursement Kenya — operations guide",
+  "meta_description": "Working-level guide to M-Pesa B2C payroll disbursement in Kenya: idempotency, partial success, settlement timing, fees, retries, security, dashboards.",
+  "category_slugs": ["payroll"]
+}

@@ -1,17 +1,18 @@
 cluster,pillar_or_spoke,primary_keyword_target,url,status,owner,last_reviewed,priority_notes
 bulk_mpesa,pillar,bulk M-Pesa payments Kenya,https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/,live,,2026-03-31,Hub: ultimate guide B2C vs B2B fees reconciliation
-bulk_mpesa,spoke,M-Pesa B2C payroll disbursement Kenya,,planned,,,Link to pillar
+bulk_mpesa,spoke,M-Pesa B2C payroll disbursement Kenya,,draft,,,Draft at docs/blog-content/007-mpesa-b2c-payroll-disbursement-kenya.html — technical operations spoke; confirm Safaricom product-naming references before publish
 bulk_mpesa,spoke,reconcile M-Pesa bulk payments payroll,,planned,,,Checklist downloadable optional
 casual_pay,pillar,casual workers payments Kenya,,draft,,,Draft at docs/blog-content/002-casual-workers-payments-kenya.html — needs statutory reviewer sign-off before publish; hub covers records + M-Pesa workflow + compliance overview
-casual_pay,spoke,pay casual labourers M-Pesa Kenya,,planned,,,
+casual_pay,spoke,pay casual labourers M-Pesa Kenya,,draft,,,Draft at docs/blog-content/008-pay-casual-labourers-mpesa-kenya.html — working-cycle walk-through under casual-pay pillar
 casual_pay,spoke,daily wage payment Kenya,,planned,,,
 expenses,pillar,expense management Kenya SMEs,,draft,,,Draft at docs/blog-content/003-expense-management-kenya-smes.html — needs statutory reviewer sign-off (VAT/ETIMS/PAYE benefits/WHT framing); hub covers policy approvals petty cash claims reconciliation fraud
-expenses,spoke,petty cash management alternatives Kenya,,planned,,,
+expenses,spoke,petty cash management alternatives Kenya,,draft,,,Draft at docs/blog-content/009-petty-cash-management-alternatives-kenya.html — six-week migration playbook; checklist downloadable optional
 expenses,spoke,employee expense claims approval workflow Kenya,,planned,,,
 payroll_sw,pillar,payroll software Kenya,,draft,,,Draft at docs/blog-content/004-payroll-software-kenya.html — needs statutory + legal + product-marketing review; competitor names (Workpay WinguBox Payroll.ke Aren Boya) appear at category level only with no comparative claims; criteria-only framing
 payroll_sw,spoke,best payroll software Kenya,,draft,,,Draft at docs/blog-content/005-payroll-payout-stack-kenya-2026.html — methodology + matrix template framing (NOT static vendor ranking); needs legal + statutory + product-marketing review; intended slug payroll-payout-stack-kenya-2026; buyer guide for the cluster
-payroll_sw,spoke,NSSF SHIF NITA payroll deductions Kenya,,planned,,,Refresh when rules change
+payroll_sw,spoke,NSSF SHIF NITA payroll deductions Kenya,,draft,,,Draft at docs/blog-content/010-nssf-shif-nita-payroll-deductions-kenya.html — STATUTORY high-scrutiny; rate-free framing; statutory-reviewer sign-off REQUIRED; refresh when rules change
 cross,spoke,KRA payroll employer obligations Kenya,,planned,,,High scrutiny — legal review
+linkable_assets,asset,Kenya payroll month-end checklist,,draft,,,Draft at docs/blog-content/006-kenya-payroll-month-end-checklist.html — printable + co-brandable; first Phase 1 linkable asset; outreach pitches to 2 accountants/HR consultants per P1-W4-02
 cross,spoke,integrate payroll accounting Xero QuickBooks Kenya,,planned,,,
 marketing_page,n/a,Centy finance payroll M-Pesa,https://www.getcenty.com/,live,,2026-03-30,Primary commercial URL
 marketing_page,n/a,About Centy,https://www.getcenty.com/about.html,live,,,

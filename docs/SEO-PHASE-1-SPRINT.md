@@ -10,7 +10,21 @@ Operational ticket plan for [`SEO-90-DAY-PLAN.md`](SEO-90-DAY-PLAN.md) Phase 1. 
 - ≥ 1 linkable asset shipped (Kenya payroll month-end checklist)
 - `SEO-KEYWORD-MAP.csv` rows populated with live URLs for everything shipped
 
-**Status today:** Pillar #1 (bulk M-Pesa payroll disbursements Kenya) is **live** on `blog.getcenty.com`. Phase 0 closed the technical gaps (dual-property GSC ping, sitemap `<lastmod>` refresh, widened `seo-check-urls.txt`).
+**Status today:** Pillar #1 (bulk M-Pesa payroll disbursements Kenya) is **live** on `blog.getcenty.com`. Phase 0 closed the technical gaps (dual-property GSC ping, sitemap `<lastmod>` refresh, widened `seo-check-urls.txt`). All Phase 1 **content deliverables are drafted on `claude/seo-automation-progress-eJAL2`** and pass dry-run validation through the WP publish pipeline (`.github/workflows/wp-publish.yml`); they are pending statutory + legal review and the manual publish step in WP admin. Week 1 measurement and technical-hygiene tickets remain external (owners-led).
+
+### Drafted deliverables snapshot
+
+| Ticket | File | Status |
+|--------|------|--------|
+| P1-W2-01 | `docs/blog-content/002-casual-workers-payments-kenya.html` | Draft committed |
+| P1-W2-02 | `docs/blog-content/003-expense-management-kenya-smes.html` | Draft committed |
+| P1-W3-01 | `docs/blog-content/004-payroll-software-kenya.html` | Draft committed |
+| P1-W3-02 | `docs/blog-content/005-payroll-payout-stack-kenya-2026.html` | Draft committed |
+| P1-W4-01 (spokes) | `docs/blog-content/007-…html`, `008-…html`, `009-…html`, `010-…html` | All 4 drafts committed |
+| P1-W4-02 (asset) | `docs/blog-content/006-kenya-payroll-month-end-checklist.html` | Draft committed |
+| P1-W4-03 (snapshot) | `docs/competitive-snapshots/2026-05-20/` (8 term templates) | Scaffolded; capture pending external |
+
+Each draft has a matching JSON sidecar (`docs/blog-content/<slug>.json`) so the WP publish workflow can run with a single `slug` input.
 
 ---
 

@@ -1,0 +1,114 @@
+<!-- Source HTML for WordPress post body. Featured image: 16:9 of a developer + finance lead reviewing M-Pesa B2C disbursement responses on a screen; alt: "Developer and finance lead reviewing M-Pesa B2C disbursement response codes on a screen". Spoke under the bulk M-Pesa pillar; technical-operations focus. Statutory references are category-only. -->
+<p><strong>Summary:</strong> A working-level guide to <strong>M-Pesa B2C payroll disbursement Kenya</strong> for finance and engineering teams — idempotency, partial-success semantics, settlement and statement latency, fees and reconciliation, retry strategy, and the operational discipline that distinguishes a controlled payroll run from a clever script. Operations guidance, not legal or tax advice; confirm statutory specifics with a qualified Kenyan advisor.</p>
+
+<p>B2C — the Safaricom pattern that sends money from a registered business context to consumer M-Pesa wallets — is the disbursement rail most Kenyan SMEs reach for when payroll moves off cash and bank transfer. The mechanics are deceptively simple ("send money to a phone number"); the operational discipline around them is what separates a payroll run that closes cleanly from one that triggers a Monday-morning forensic. This spoke sits under the pillar on <a href="https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/">bulk M-Pesa payroll disbursements Kenya</a> and focuses on the working-level details.</p>
+
+<h2>What B2C means in practice</h2>
+
+<p>B2C in Safaricom's product language refers to sending value from a business account to individual M-Pesa wallets — the canonical payroll-disbursement pattern. The transport is either an integration-led pattern (your payroll platform or middleware calls the relevant API) or a portal-led pattern (your finance team uploads or composes a batch in a controlled UI). Either way, the same operational primitives apply: every line carries an MSISDN, an amount, and a reference that ties back to the originating payroll run.</p>
+
+<p>The product names, fee tariffs, and limits in Safaricom's enterprise offerings evolve; always confirm current product documentation, fees, and limits directly with your Safaricom relationship manager before architecting around a number from a blog post.</p>
+
+<h2>Idempotency: the single most-important property</h2>
+
+<p>Idempotency means submitting the same logical batch twice produces the same outcome — no double payment, no doubled records. For payroll, idempotency is not a nice-to-have; it is the property that lets you retry a failed network call without paying everyone twice.</p>
+
+<ul>
+<li>Assign each batch a <strong>stable, unique reference</strong> in your system before submission (for example <code>PAYROLL-2026-04-MAIN</code>).</li>
+<li>Assign each line within the batch a stable line-reference (for example <code>PAYROLL-2026-04-MAIN-0042</code>).</li>
+<li>Pass those references to the rail; rely on the rail's idempotency-key semantics where supported.</li>
+<li>Refuse to submit a batch whose reference has already been seen by your system, even if the provider would accept it.</li>
+<li>On retry, send the <em>same</em> references — never re-mint identifiers on a retry path.</li>
+</ul>
+
+<p>Without idempotency, a timeout becomes a guessing game ("did it land?") and the safe answer ("don't retry, investigate") delays payroll by hours.</p>
+
+<h2>Partial-success semantics</h2>
+
+<p>A B2C batch of 200 lines rarely succeeds 200 times. Some lines fail for mundane reasons — a number recently deregistered, an account in an inactive state, a throttled provider response. The right architecture treats <strong>partial success as the expected case</strong>:</p>
+
+<ul>
+<li>Capture a per-line response: success, failure with reason code, pending (where the provider returns asynchronously), or reversal.</li>
+<li>Treat the absence of an explicit success per line as a failure — do not assume "we got 200 responses, must be fine".</li>
+<li>For pending lines, define a timeout after which the line is treated as failed and the failure path runs.</li>
+<li>Store provider response codes alongside your own line reference for later forensic and trend analysis.</li>
+</ul>
+
+<p>Common failure reasons cluster around invalid recipient state, low float on the business side, transient provider throttling, and beneficiary KYC restrictions. Map each reason to a triage action so the next operator does not re-invent the response.</p>
+
+<h2>Settlement timing and statement latency</h2>
+
+<p>Settlement timing — when value actually arrives in the recipient's wallet — and statement latency — when finance sees authoritative records suitable for reconciliation — are two different clocks. Treat them that way:</p>
+
+<ul>
+<li><strong>Settlement</strong> on B2C is generally near-real-time in nominal conditions, with retries and reversals adding minutes to hours.</li>
+<li><strong>Provider statements</strong> showing batch-level reconciliation may lag the underlying movements by hours, especially around peak windows.</li>
+<li><strong>Bank statement movements</strong> reflecting the float-funding side may settle on the next banking day, depending on the funding rail.</li>
+</ul>
+
+<p>For payroll cycles, this matters because employees expect a payday landing time and finance needs final status for month-end. Communicate honestly with staff — "within an hour" rather than "instant" — and budget reconciliation against the provider statement, not the screen confirmation.</p>
+
+<h2>Fees and reconciliation</h2>
+
+<p>B2C disbursement attracts fees that vary by product, volume tier, and contract. The reconciliation discipline:</p>
+
+<ul>
+<li>Confirm whether fees are <strong>net-of-amount</strong> (deducted from the gross float, line-by-line) or <strong>separately invoiced</strong> (billed monthly, posted as an operating expense) under your contract.</li>
+<li>Document the policy in your finance manual — employer-absorbed vs employee-absorbed — and apply it consistently.</li>
+<li>Map fees to a separate GL line where invoiced separately; net them into the wage line only if your accounting policy requires.</li>
+<li>Reconcile fees monthly against the provider statement; trend the per-line cost so you spot tariff drift.</li>
+</ul>
+
+<p>The cost difference between an integrated B2C rail and a portal-upload pattern is rarely the per-transaction fee — it is the operational time saved by automation, which most SMEs underestimate at signing.</p>
+
+<h2>Retry strategy that does not double-pay</h2>
+
+<p>A safe retry strategy is built on three rules:</p>
+
+<ol>
+<li><strong>Same identifier on retry.</strong> The provider's idempotency layer (and yours) deduplicates correctly.</li>
+<li><strong>Bounded retries with backoff.</strong> Three retries with exponential backoff is a reasonable default; beyond that, escalate to human triage.</li>
+<li><strong>Status before action.</strong> Before retrying, query the rail for the current status of the line; act on the authoritative answer, not the cached failure assumption.</li>
+</ol>
+
+<p>Where retries exhaust without success, fall back to an alternate rail (bank transfer, alternate wallet) under the documented exception process. Carry the original batch reference into the fallback record so the audit story stays linear.</p>
+
+<h2>Security and access discipline</h2>
+
+<p>B2C disbursement is high-value movement; the controls that fit:</p>
+
+<ul>
+<li>Production credentials live in a secrets manager, not in code or email.</li>
+<li>Rotation calendar published; rotation does not coincide with month-end.</li>
+<li>Maker–checker on every batch initiation, enforced at role level.</li>
+<li>IP allowlisting where the rail supports it.</li>
+<li>Out-of-band verification for beneficiary-bank-detail changes (mobile-money number changes treated with the same care).</li>
+<li>Webhook signature verification on async provider callbacks.</li>
+</ul>
+
+<p>None of these replace Safaricom's own fraud tooling; they prevent your internal process from becoming the weak link.</p>
+
+<h2>Dashboards and observability</h2>
+
+<p>What finance and operations should be able to see at a glance, every cycle:</p>
+
+<ul>
+<li>Batch state: submitted, succeeded lines, failed lines, pending lines, exception count.</li>
+<li>Time-to-complete from batch lock to last successful line.</li>
+<li>Top failure reasons trended over the last 3–6 cycles.</li>
+<li>Open exceptions older than the SLA, with named owners.</li>
+<li>Fee envelope vs prior cycle.</li>
+</ul>
+
+<p>When the dashboards stabilise, conversations shift from firefighting to operational tuning — the moment a guide like this earns its keep.</p>
+
+<h2>Where this fits in the cluster</h2>
+
+<ul>
+<li>For the broader operational pattern, see <a href="https://blog.getcenty.com/bulk-mpesa-payroll-disbursements-kenya/">bulk M-Pesa payroll disbursements Kenya</a>.</li>
+<li>For applying B2C to a casual workforce specifically, see <a href="https://blog.getcenty.com/casual-workers-payments-kenya/">casual workers payments Kenya</a>.</li>
+<li>For evaluating platforms that wrap B2C natively versus those that bolt it on, see <a href="https://blog.getcenty.com/payroll-software-kenya/">payroll software Kenya: how to choose</a>.</li>
+<li>For the period-close discipline B2C disbursement lives within, see the <a href="https://blog.getcenty.com/kenya-payroll-month-end-checklist/">Kenya payroll month-end checklist</a>.</li>
+</ul>
+
+<p><a href="https://www.getcenty.com/">Centy</a> builds B2C disbursement, reconciliation, and audit-trail discipline into the payroll workflow by default; for product context, see the <a href="https://www.getcenty.com/about.html">about Centy</a> page or <a href="https://app.centyhq.com/signup" rel="noopener noreferrer">create an account on Centy</a>. This article is operations guidance for finance and engineering teams, not legal or tax advice; confirm statutory specifics with a qualified Kenyan advisor.</p>
