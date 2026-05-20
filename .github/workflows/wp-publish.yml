@@ -1,0 +1,86 @@
+# Publish blog drafts from docs/blog-content/ to blog.getcenty.com via WP REST API.
+#
+# Secrets (Settings → Secrets and variables → Actions):
+#   WP_BLOG_URL          e.g. https://blog.getcenty.com
+#   WP_BLOG_USER         WordPress username with publish capability
+#   WP_BLOG_APP_PASSWORD WordPress Application Password (spaces stripped is fine)
+#
+# Safety defaults:
+#   - status defaults to "draft" — a human flips to "publish" in WP admin
+#     after setting featured image + Rank Math meta + reviewing.
+#   - dry_run defaults to "true" — set to "false" to actually write.
+#   - update_if_exists defaults to "false" — duplicate slug fails loudly.
+
+name: WP — publish blog draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Pillar slug under docs/blog-content/ (no extension), e.g. 002-casual-workers-payments-kenya"
+        required: true
+        type: string
+      status:
+        description: "Initial WP post status (DEFAULT draft for safety; flip to publish only after review in WP admin)"
+        required: true
+        default: draft
+        type: choice
+        options:
+          - draft
+          - publish
+      update_if_exists:
+        description: "If a post with the same slug exists, update it instead of failing"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      dry_run:
+        description: "Dry run — validate inputs and load files but do not write to WordPress"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    defaults:
+      run:
+        working-directory: tools/wp-publish
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: tools/wp-publish/requirements.txt
+
+      - name: Install deps
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Publish
+        env:
+          WP_BLOG_URL: ${{ secrets.WP_BLOG_URL }}
+          WP_BLOG_USER: ${{ secrets.WP_BLOG_USER }}
+          WP_BLOG_APP_PASSWORD: ${{ secrets.WP_BLOG_APP_PASSWORD }}
+          INPUT_SLUG: ${{ github.event.inputs.slug }}
+          INPUT_STATUS: ${{ github.event.inputs.status }}
+          INPUT_UPDATE_IF_EXISTS: ${{ github.event.inputs.update_if_exists }}
+          INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          python publish.py
